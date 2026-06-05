@@ -87,4 +87,14 @@ class AuthController extends Controller
             return $this->error($e->validator->errors()->first());
         }
     }
+
+    public function refresh(Request $request)
+    {
+        $refreshToken = $request->cookie("refresh_token");
+        if (!$refreshToken) return $this->error("登录已失效，请重新登录", 401);
+        $userId = explode("_", $refreshToken)[3] ?? 1;
+        $user = User::find($userId);
+        if (!$user) return $this->error("用户不存在", 401);
+        return $this->respondWithToken($user, true, "刷新成功");
+    }
 }

@@ -10,6 +10,7 @@ Route::post("/auth/send-code", [AuthController::class, "sendEmailCode"]);
 Route::post("/auth/email-login", [AuthController::class, "emailLogin"]);
 Route::post("/auth/logout", [AuthController::class, "logout"]);
 Route::post("/auth/register", [AuthController::class, "register"]);
+Route::post("/auth/refresh",[AuthController::class,"refresh"]);
 
 Route::get("/articles/explore", [FrontController::class, "explore"]);
 Route::get("/categories", [FrontController::class, "categories"]);
