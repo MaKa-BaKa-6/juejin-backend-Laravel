@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -67,19 +68,18 @@ class AuthController extends Controller
     {
         try {
             $validated = $request->validate([
-                "username" => "required",
                 "phone"    => "required|unique:users",
                 "password" => "required",
             ], [
-                'username.required' => '用户名不能为空',
                 'phone.required'    => '手机号不能为空',
                 'phone.unique'      => '该手机号已被注册',
                 'password.required' => '密码不能为空',
             ]);
             User::create([
-                "username" => $request->username,
+                "username" => "用户_" . Str::random(6),
                 "phone"    => $request->phone,
-                "password" => $request->password,
+                "password" => Hash::make($request->password),
+                "avatar" => "http://localhost:8000/storage/image/user.png"
             ]);
 
             return $this->success(null, "注册成功");
